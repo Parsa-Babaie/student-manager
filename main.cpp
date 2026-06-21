@@ -5,6 +5,16 @@
 
 using namespace std;
 
+void loadStudents(vector<string>& students){
+    ifstream file("students.txt");
+
+    string student;
+    while(getline(file,student)){
+        students.push_back(student);
+    }
+    file.close();
+}
+
 void saveStudents(vector<string>& students){
     ofstream file("students.txt");
     for(string student: students){
@@ -17,6 +27,7 @@ int main(){
     int choice;
     string studentName;
     vector<string> students;
+    loadStudents(students);
     int studentNumber;
     while(true){
     cout<< "=== student manager ==="<<endl;
