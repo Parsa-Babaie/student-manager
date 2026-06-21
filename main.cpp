@@ -31,9 +31,21 @@ void showMenu(){
     cout<<"4. Exit"<<endl;
 }
 
+void addStudent(vector<string>& students){
+    string studentName;
+
+    cout<<"Enter student name: ";
+    cin>> studentName;
+
+    students.push_back(studentName);
+    saveStudents(students);
+
+    cout<<"student "<<studentName<<" added successfully!"<<endl;
+}
+
+
 int main(){
     int choice;
-    string studentName;
     vector<string> students;
     loadStudents(students);
     int studentNumber;
@@ -43,13 +55,8 @@ int main(){
     cin>>choice;
     
     if(choice==1){
-        cout<<"Enter student name: ";
-        cin>>studentName;
-        students.push_back(studentName);
-        saveStudents(students);
-        cout<<"Student "<<studentName<<" added succesfully!"<<endl;
-       
-    }
+        addStudent(students);
+    }   
     else if(choice==2){
         if(students.empty()){
             cout<<"No student found."<<endl;
