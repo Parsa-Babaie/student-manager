@@ -5,6 +5,41 @@
 
 using namespace std;
 
+void saveStudents(vector<string>& students){
+    ofstream file("students.txt");
+    for(string student: students){
+        file<< student <<endl;
+    }
+    file.close();
+}
+
+void editStudent(vector<string>& students){
+    int studentNUmber;
+    string newName;
+    if(students.empty()){
+        cout<<"No student found!"<<endl;
+        return;
+    }
+    else{
+        cout<<"\nstudents list: "<<endl;
+        for(int i=0;i<students.size();i++){
+            cout<<i+1<<". "<<students[i]<<endl;
+        }
+        cout<<"Enter student number to edit: ";
+        cin>>studentNUmber;
+        if(studentNUmber>=1 && studentNUmber<=students.size()){
+            cout<<"Enter new name: ";
+            cin >> newName;
+            students[studentNUmber - 1] = newName;
+            saveStudents(students);
+            cout<<"Student updated successfully!"<<endl;
+        }
+        else{
+            cout<<"Invalid student number"<<endl;
+        }
+    }
+}
+
 void searchStudent(vector<string>& students){
     string name;
     bool found = false;
@@ -36,21 +71,14 @@ void loadStudents(vector<string>& students){
     file.close();
 }
 
-void saveStudents(vector<string>& students){
-    ofstream file("students.txt");
-    for(string student: students){
-        file<< student <<endl;
-    }
-    file.close();
-}
-
 void showMenu(){
     cout<<"\n=== student manager ==="<<endl;
     cout<<"1. Add Student"<<endl;
     cout<<"2. Show students"<<endl;
     cout<<"3. Delete student"<<endl;
     cout<<"4. Search student"<<endl;
-    cout<<"5. Exit"<<endl;
+    cout<<"5. Edit student"<<endl;
+    cout<<"6. Exit"<<endl;
 }
 
 void addStudent(vector<string>& students){
@@ -121,6 +149,9 @@ int main(){
         searchStudent(students);
     }
     else if(choice==5){
+        editStudent(students);
+    }
+    else if(choice==6){
         cout<<"Goodbye!"<<endl;
         break;
     }
