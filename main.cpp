@@ -8,6 +8,7 @@ int main(){
     int choice;
     string studentName;
     vector<string> students;
+    int studentNumber;
     while(true){
     cout<< "=== student manager ==="<<endl;
     cout<<"1. Add Student"<<endl;
@@ -33,6 +34,26 @@ int main(){
             cout<<"\nStudent list: "<<endl;
             for(int i=0; i < students.size(); i++){
                 cout<<i+1<<". "<< students[i] <<endl;
+            }
+        }
+    }
+    else if(choice == 3){
+        if(students.empty()){
+            cout<<"No student to delete."<<endl;
+        }
+        else{
+            cout<<"\nstudents list: "<<endl;
+            for(int i=0;i < students.size();i++){
+                cout<<i+1<<". "<<students[i]<<endl;
+            }
+            cout<<"Enter student number to delete: ";
+            cin>>studentNumber;
+            if(studentNumber >= 1 && studentNumber <= students.size()){
+                students.erase(students.begin()+studentNumber-1);
+                cout<<"student earse successfully"<<endl;
+            }
+            else{
+                cout<<"Invalid student number!"<<endl;
             }
         }
     }
