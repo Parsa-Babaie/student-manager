@@ -1,8 +1,17 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<fstream>
 
 using namespace std;
+
+void saveStudents(vector<string>& students){
+    ofstream file("students.txt");
+    for(string student: students){
+        file<< student <<endl;
+    }
+    file.close();
+}
 
 int main(){
     int choice;
@@ -23,6 +32,7 @@ int main(){
         cout<<"Enter student name: ";
         cin>>studentName;
         students.push_back(studentName);
+        saveStudents(students);
         cout<<"Student "<<studentName<<" added succesfully!"<<endl;
        
     }
@@ -50,6 +60,7 @@ int main(){
             cin>>studentNumber;
             if(studentNumber >= 1 && studentNumber <= students.size()){
                 students.erase(students.begin()+studentNumber-1);
+                saveStudents(students);
                 cout<<"student earse successfully"<<endl;
             }
             else{
