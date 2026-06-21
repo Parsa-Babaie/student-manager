@@ -5,6 +5,27 @@
 
 using namespace std;
 
+void searchStudent(vector<string>& students){
+    string name;
+    bool found = false;
+    cout<<"Enter student name:";
+    cin>>name;
+
+    for(string student: students){
+        if(student==name){
+            found = true;
+            break;
+        }
+    }
+    if(found){
+        cout<<"Student found!"<<endl;
+    }
+    else{
+        cout<<"Student not found!"<<endl;
+    }
+
+}
+
 void loadStudents(vector<string>& students){
     ifstream file("students.txt");
 
@@ -28,7 +49,8 @@ void showMenu(){
     cout<<"1. Add Student"<<endl;
     cout<<"2. Show students"<<endl;
     cout<<"3. Delete student"<<endl;
-    cout<<"4. Exit"<<endl;
+    cout<<"4. Search student"<<endl;
+    cout<<"5. Exit"<<endl;
 }
 
 void addStudent(vector<string>& students){
@@ -96,6 +118,9 @@ int main(){
         deleteStudent(students);
     }
     else if(choice==4){
+        searchStudent(students);
+    }
+    else if(choice==5){
         cout<<"Goodbye!"<<endl;
         break;
     }
