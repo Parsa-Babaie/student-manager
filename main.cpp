@@ -25,8 +25,15 @@ int main(){
        
     }
     else if(choice==2){
-        for(string student: students)
-        cout<< student <<endl;
+        if(students.empty()){
+            cout<<"No student found."<<endl;
+        }
+        else{
+            cout<<"\nStudent list: "<<endl;
+            for(int i=0; i < students.size(); i++){
+                cout<<i+1<<". "<< students[i] <<endl;
+            }
+        }
     }
     else if(choice==3){
         cout<<"Goodbye!"<<endl;
