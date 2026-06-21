@@ -66,6 +66,17 @@ void deleteStudent(vector<string>& students){
     }
 }
 
+void showStudents(const vector<string>& students){
+    if(students.empty()){
+        cout<<"No student found!"<<endl;
+    }
+    else{
+        cout<<"\nStudents list: "<<endl;
+        for(int i=0;i<students.size();i++){
+            cout<<i+1<<". "<<students[i]<<endl;
+        }
+    }
+}
 int main(){
     int choice;
     vector<string> students;
@@ -79,15 +90,7 @@ int main(){
         addStudent(students);
     }   
     else if(choice==2){
-        if(students.empty()){
-            cout<<"No student found."<<endl;
-        }
-        else{
-            cout<<"\nStudent list: "<<endl;
-            for(int i=0; i < students.size(); i++){
-                cout<<i+1<<". "<< students[i] <<endl;
-            }
-        }
+        showStudents(students);
     }    
     else if(choice == 3){
         deleteStudent(students);
