@@ -2,6 +2,7 @@
 #include<string>
 #include<vector>
 #include<fstream>
+#include<limits>
 
 using namespace std;
 
@@ -29,7 +30,8 @@ void editStudent(vector<string>& students){
         cin>>studentNUmber;
         if(studentNUmber>=1 && studentNUmber<=students.size()){
             cout<<"Enter new name: ";
-            cin >> newName;
+            cin.ignore();
+            getline(cin , newName);
             students[studentNUmber - 1] = newName;
             saveStudents(students);
             cout<<"Student updated successfully!"<<endl;
@@ -81,11 +83,26 @@ void showMenu(){
     cout<<"6. Exit"<<endl;
 }
 
+bool studentExist(const vector<string>& students , const string& name){
+    for(string student : students){
+        if(student == name){
+            return true;
+        }
+    }
+    return false;
+}
+
 void addStudent(vector<string>& students){
     string studentName;
 
     cout<<"Enter student name: ";
-    cin>> studentName;
+    cin.ignore();
+    getline(cin , studentName);
+    
+    if(studentExist(students,studentName)){
+        cout<< "student already exist!" <<endl;
+        return;
+    }
 
     students.push_back(studentName);
     saveStudents(students);
@@ -135,6 +152,14 @@ int main(){
     showMenu();    
     cout<<"Enter your choice: ";
     cin>>choice;
+    if(cin.fail()){
+        cin.clear();
+
+        cin.ignore(numeric_limits<streamsize>::max() , '\n');
+
+        cout<<"Please enter a valid number!"<<endl;
+        continue;
+    }
     
     if(choice==1){
         addStudent(students);
