@@ -1,6 +1,7 @@
 #include "student.h"
 
 #include<iostream>
+#include<algorithm>
 #include<fstream>
 
 using namespace std;
@@ -9,46 +10,50 @@ void loadStudents(vector<Student>& students){
     ifstream file("students.txt");
 
     Student temp;
+    string name;
     string ageStr;
 
-    while(getline(file , temp.name)){
+    while(getline(file , name)){
+        temp.setName(name);
         getline(file , ageStr);
 
-        temp.age = stoi(ageStr);
+        temp.setAge(stoi(ageStr));
 
         students.push_back(temp);
     }
     file.close();
 }
-void saveStudents(vector<Student>& students){
+void saveStudents(const vector<Student>& students){
     ofstream file("students.txt");
-    for(Student student: students){
-        file<< student.name <<endl;
-        file<< student.age << endl;
+    for(const Student& student: students){
+        file<< student.getName() <<endl;
+        file<< student.getAge() << endl;
     }
     file.close();
 }
 
 void addStudent(vector<Student>& students){
-    Student newStudent;
+    string name;
+    int age;
 
     cout<<"Enter student name: ";
 
     cin.ignore();
-    getline(cin , newStudent.name);
+    getline(cin , name);
 
     cout<<"Enter student age: ";
-    cin>>newStudent.age;
+    cin>>age;
+
     
-  /*  if(studentExist(students,studentName)){
+    if(studentExist(students,name)){
         cout<< "student already exist!" <<endl;
         return;
-    }*/
+    }
 
-    students.push_back(newStudent);
+    students.emplace_back(name , age);
     saveStudents(students);
 
-    cout<<"student "<<newStudent.name<<" added successfully!"<<endl;
+    cout<<"student "<<name<<" added successfully!"<<endl;
 }
 void deleteStudent(vector<Student>& students){
     int studentNumber;
@@ -58,7 +63,7 @@ void deleteStudent(vector<Student>& students){
     else{
         cout<<"\nStudents list: "<<endl;
         for(int i=0 ; i < students.size() ; i++){
-            cout<<i+1<<". "<<students[i].name<<" | Age: "<<students[i].age<<endl;
+            cout<<i+1<<". "<<students[i].getName()<<" | Age: "<<students[i].getAge()<<endl;
         }
         cout<<"Enter student number to delete:";
         cin>>studentNumber;
@@ -82,7 +87,7 @@ void editStudent(vector<Student>& students){
     else{
         cout<<"\nstudents list: "<<endl;
         for(int i=0;i<students.size();i++){
-            cout<<i+1<<". "<<students[i].name<<" | Age: "<<students[i].age<<endl;
+            cout<<i+1<<". "<<students[i].getName()<<" | Age: "<<students[i].getAge()<<endl;
         }
         cout<<"Enter student number to edit: ";
         cin>>studentNUmber;
@@ -90,12 +95,12 @@ void editStudent(vector<Student>& students){
             cout<<"Enter new name: ";
             cin.ignore();
             getline(cin , newName);
-            students[studentNUmber - 1].name = newName;
+            students[studentNUmber - 1].setName(newName);
             saveStudents(students);
             cout<<"Student updated successfully!"<<endl;
         }
         else{
-            cout<<"Invalid student number"<<endl;
+            cout<<"Invalid student number!"<<endl;
         }
     }
 }
@@ -104,10 +109,11 @@ void searchStudent(vector<Student>& students){
     string name;
     bool found = false;
     cout<<"Enter student name:";
-    cin>>name;
+    cin.ignore();
+    getline(cin , name);
 
-    for(Student student: students){
-        if(student.name==name){
+    for(const Student& student: students){
+        if(student.getName()==name){
             found = true;
             break;
         }
@@ -127,15 +133,79 @@ void showStudents(const vector<Student>& students){
     else{
         cout<<"\nStudents list: "<<endl;
         for(int i=0;i<students.size();i++){
-            cout<<i+1<<". "<<students[i].name<<" | Age: "<<students[i].age<<endl;
+            cout<<i+1<<". "<<students[i].getName()<<" | Age: "<<students[i].getAge()<<endl;
         }
     }
 }
-bool studentExist(const vector<Student>& students , const string& name){
-    for(Student student : students){
-        if(student.name == name){
+
+void sortStudent(vector<Student>& students){
+    sort(students.begin() , students.end(),
+        [](const Student& a ,const Student& b){
+            return a.getName() < b.getName();
+        });
+    saveStudents(students);
+    cout<<"Student sort successfully!"<<endl;    
+}
+void sortAge(vector<Student>& students){
+    sort(students.begin() , students.end(),
+         [](const Student& a , const Student& b){
+            return a.getAge() < b.getAge();
+        });
+    saveStudents(students);    
+    cout<<"Student sort by age successfully!"<<endl;    
+}
+void filterBetweenAges(const vector<Student>& students){
+    int minAge;
+    int maxAge;
+    cout<<"Enter minimum age: ";
+    cin>>minAge;
+    cout<<"Enter maximum age: ";
+    cin>>maxAge;
+    if(minAge > maxAge){
+        cout<<"Invalid age range!"<<endl;
+        return;
+    }
+    cout<<"\nStudents:\n";
+    bool found = false;
+    for(const Student& student : students){
+        if(student.getAge() >= minAge && student.getAge() <= maxAge){
+            cout<<student.getName()
+                <<" | Age: "
+                <<student.getAge()
+                <<endl;
+                found = true;
+        }
+    }
+    if(!found){
+        cout<<"No students found!"<<endl;
+    }
+}
+
+bool studentExist(const vector<Student>& students, const string& name){
+    for(const Student& student : students){
+        if(student.getName() == name){
             return true;
         }
     }
     return false;
+}
+void filterByAge(const vector<Student>& students){
+    int minAge;
+    cout<<"Enter a minimum age: ";
+    cin>>minAge;
+    bool found = false;
+
+    cout<<"\nStudents:\n";
+    for(const Student& student : students){
+        if(student.getAge() >= minAge){
+            cout<<student.getName()
+                <<" | Age: "
+                <<student.getAge()
+                <<endl;
+            found = true;
+        }
+    }
+    if(!found){
+        cout<<"No students found!"<<endl;
+    }
 }
